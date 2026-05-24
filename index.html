@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Candy Cane Verticale</title>
+    <title>Countdown Candy Cane con Neve Arcobaleno</title>
     <style>
         @import url('https://googleapis.com');
 
@@ -14,7 +14,7 @@
         body {
             margin: 0;
             padding: 10px;
-            background-color: #191919; /* Sfondo Grigio Scuro richiesto */
+            background-color: #191919; /* Sfondo Grigio Scuro */
             color: #ffffff;
             font-family: 'Outfit', sans-serif;
             display: flex;
@@ -23,6 +23,7 @@
             min-height: 100vh;
             text-align: center;
             overflow: hidden;
+            position: relative;
         }
 
         .container {
@@ -30,6 +31,8 @@
             max-width: 600px;
             padding: 10px;
             background: #191919;
+            position: relative;
+            z-index: 2; /* Mantiene i numeri sopra la neve */
         }
 
         .countdown {
@@ -45,15 +48,14 @@
             align-items: center;
             flex: 1;
             min-width: 0;
+            position: relative;
         }
 
-        /* --- EFFETTO STRISCE VERTICALI CANDY CANE SUI NUMERI --- */
+        /* --- EFFETTO STRISCE VERTICALI CANDY CANE --- */
         .number {
             font-size: clamp(2.2rem, 8vw, 3.8rem);
             font-weight: 800;
             line-height: 1;
-            
-            /* Genera la trama a strisce verticali rosse e bianche */
             background: linear-gradient(
                 to right,
                 #e63946 0%,
@@ -61,13 +63,9 @@
                 #ffffff 50%,
                 #ffffff 100%
             );
-            background-size: 14px 100%; /* Spessore delle strisce verticali */
-            
-            /* Applica la trama direttamente al testo del numero */
+            background-size: 14px 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            
-            /* Leggera ombra per staccare dal fondo scuro */
             filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.5));
         }
 
@@ -81,6 +79,36 @@
             font-weight: 700;
         }
 
+        /* --- ANIMAZIONE NEVE DAL BASSO VERSO L'ALTO --- */
+        .snowflake {
+            position: absolute;
+            bottom: -20px;
+            font-size: 1em;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -20px;
+                transform: translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8; /* Maggiore opacità per far risaltare i colori */
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                bottom: 105vh;
+                transform: translateX(60px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         .expired {
             font-size: 2rem;
             font-weight: 800;
@@ -90,6 +118,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Contenitore della neve dinamica -->
+    <div id="snow-container"></div>
 
     <div class="container">
         <div class="countdown" id="timer">
@@ -135,6 +166,44 @@
             document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
         }, 1000);
+
+        // GENERATORE DI FIOCCHI IN RISALITA CON COLORI ARCOBALENO
+        function createSnowflake() {
+            const snowContainer = document.getElementById('snow-container');
+            if (!snowContainer) return;
+
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            const snowTypes = ['❄', '❅', '❆', '•'];
+            snowflake.innerText = snowTypes[Math.floor(Math.random() * snowTypes.length)];
+            
+            // Array con i colori dell'arcobaleno
+            const rainbowColors = [
+                '#ff3333', // Rosso
+                '#ff9933', // Arancione
+                '#ffff33', // Giallo
+                '#33cc33', // Verde
+                '#3399ff', // Azzurro
+                '#3333ff', // Blu
+                '#9933ff'  // Viola
+            ];
+            
+            // Assegna un colore casuale dall'array ad ogni fiocco
+            snowflake.style.color = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
+            
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 4 + 3 + 's';
+            snowflake.style.fontSize = Math.random() * 8 + 12 + 'px'; // Leggermente più grandi per vedere meglio i colori
+
+            snowContainer.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 7000);
+        }
+
+        setInterval(createSnowflake, 150); // Generazione leggermente più frequente
     </script>
 
 </body>
