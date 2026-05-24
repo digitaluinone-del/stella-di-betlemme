@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown</title>
+    <title>Countdown Candy Cane</title>
     <style>
+        /* Importato un font più spesso e morbido per ricordare i bastoncini di zucchero */
         @import url('https://googleapis.com');
 
         * {
@@ -14,9 +15,9 @@
         body {
             margin: 0;
             padding: 10px;
-            background-color: #191919; /* Sfondo richiesto */
+            background-color: #191919; /* Sfondo Grigio Scuro */
             color: #ffffff;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -47,25 +48,46 @@
             min-width: 0;
         }
 
+        /* --- EFFETTO STRISCE CANDY CANE SUI NUMERI --- */
         .number {
-            font-size: clamp(2rem, 8vw, 3.5rem);
-            font-weight: 600;
-            color: #e63946; /* Rosso Natale per i numeri */
+            font-size: clamp(2.2rem, 8vw, 3.8rem);
+            font-weight: 800;
             line-height: 1;
+            
+            /* Genera la trama a strisce diagonali rosse e bianche */
+            background: linear-gradient(
+                45deg,
+                #e63946 25%,
+                #ffffff 25%,
+                #ffffff 50%,
+                #e63946 50%,
+                #e63946 75%,
+                #ffffff 75%,
+                #ffffff 100%
+            );
+            background-size: 20px 20px; /* Dimensione delle strisce */
+            
+            /* Applica la trama direttamente al testo del numero */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Aggiunge un leggero rilievo per far risaltare il testo */
+            filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.5));
         }
 
         .label {
             font-size: clamp(0.65rem, 2.2vw, 0.8rem);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
-            color: #ffffff; /* Scritte Bianche */
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            color: #ffffff; /* Etichette Bianche */
             white-space: nowrap;
+            font-weight: 700;
         }
 
         .expired {
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 800;
             color: #ffffff;
             width: 100%;
         }
@@ -74,7 +96,6 @@
 <body>
 
     <div class="container">
-        <!-- Solo il Countdown -->
         <div class="countdown" id="timer">
             <div class="time-box">
                 <span class="number" id="days">00</span>
@@ -96,7 +117,6 @@
     </div>
 
     <script>
-        // Scadenza fissa: 23 Dicembre 2026 alle ore 01:00:00
         const targetDate = new Date('December 23, 2026 01:00:00').getTime();
 
         const countdownInterval = setInterval(function() {
